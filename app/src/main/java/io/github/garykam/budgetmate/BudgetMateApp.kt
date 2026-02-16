@@ -17,15 +17,14 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Analytics
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -44,17 +43,16 @@ fun BudgetMateApp() {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
-    var topBarContent by remember { mutableStateOf<@Composable () -> Unit>({}) }
+    var topBar by remember { mutableStateOf<@Composable () -> Unit>({}) }
 
     Scaffold(
         topBar = {
             AnimatedVisibility(
-                visible = currentRoute == "add_transaction",
+                visible = true, // TopBar is now always visible but its content is customizable
                 enter = slideInVertically(initialOffsetY = { -it }) + expandVertically() + fadeIn(),
                 exit = slideOutVertically(targetOffsetY = { -it }) + shrinkVertically() + fadeOut()
             ) {
-                @OptIn(ExperimentalMaterial3Api::class)
-                TopAppBar(title = { topBarContent() })
+                topBar()
             }
         },
         bottomBar = {
@@ -74,8 +72,8 @@ fun BudgetMateApp() {
             ) {
                 FloatingActionButton(
                     onClick = { navController.navigate("add_transaction") },
-                    containerColor = androidx.compose.material3.MaterialTheme.colorScheme.primary,
-                    contentColor = androidx.compose.material3.MaterialTheme.colorScheme.onPrimary,
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary,
                 ) {
                     Icon(Icons.Default.Add, contentDescription = "Add Transaction")
                 }
@@ -94,7 +92,7 @@ fun BudgetMateApp() {
         Box(modifier = Modifier.padding(basePadding)) {
             BudgetMateNavHost(
                 navController = navController,
-                onSetTopBar = { topBarContent = it },
+                onSetTopBar = { topBar = it },
                 modifier = Modifier.padding(bottom = if (currentRoute != "add_transaction") 80.dp else 0.dp)
             )
         }

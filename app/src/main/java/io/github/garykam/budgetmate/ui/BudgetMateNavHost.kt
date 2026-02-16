@@ -32,8 +32,7 @@ fun BudgetMateNavHost(
         composable("add_transaction") {
             AddTransactionScreen(
                 onSetTopBar = onSetTopBar,
-                onBack = { navController.popBackStack() },
-                modifier = modifier
+                onBack = { navController.popBackStack() }
             )
         }
     }
