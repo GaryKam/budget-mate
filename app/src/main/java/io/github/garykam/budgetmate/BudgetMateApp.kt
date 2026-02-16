@@ -1,8 +1,16 @@
 package io.github.garykam.budgetmate
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -24,15 +32,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import io.github.garykam.budgetmate.ui.AddTransactionScreen
-import io.github.garykam.budgetmate.ui.HistoryScreen
-import io.github.garykam.budgetmate.ui.SettingsScreen
-import io.github.garykam.budgetmate.ui.StatsScreen
+import io.github.garykam.budgetmate.ui.BudgetMateNavHost
 
 @Composable
 fun BudgetMateApp() {
@@ -43,14 +48,20 @@ fun BudgetMateApp() {
 
     Scaffold(
         topBar = {
-            @OptIn(ExperimentalMaterial3Api::class)
-            TopAppBar(title = { topBarContent() })
+            AnimatedVisibility(
+                visible = currentRoute == "add_transaction",
+                enter = slideInVertically(initialOffsetY = { -it }) + expandVertically() + fadeIn(),
+                exit = slideOutVertically(targetOffsetY = { -it }) + shrinkVertically() + fadeOut()
+            ) {
+                @OptIn(ExperimentalMaterial3Api::class)
+                TopAppBar(title = { topBarContent() })
+            }
         },
         bottomBar = {
             AnimatedVisibility(
                 visible = currentRoute != "add_transaction",
-                enter = slideInVertically(initialOffsetY = { it }),
-                exit = slideOutVertically(targetOffsetY = { it })
+                enter = slideInVertically(initialOffsetY = { it }) + fadeIn(),
+                exit = slideOutVertically(targetOffsetY = { it }) + fadeOut()
             ) {
                 NavigationBar(navController)
             }
@@ -58,8 +69,8 @@ fun BudgetMateApp() {
         floatingActionButton = {
             AnimatedVisibility(
                 visible = currentRoute != "add_transaction",
-                enter = slideInVertically(initialOffsetY = { it * 2 }),
-                exit = slideOutVertically(targetOffsetY = { it * 2 })
+                enter = slideInVertically(initialOffsetY = { it * 2 }) + fadeIn(),
+                exit = slideOutVertically(targetOffsetY = { it * 2 }) + fadeOut()
             ) {
                 FloatingActionButton(
                     onClick = { navController.navigate("add_transaction") },
@@ -72,29 +83,20 @@ fun BudgetMateApp() {
         },
         floatingActionButtonPosition = FabPosition.EndOverlay,
     ) { innerPadding ->
-        NavHost(
-            navController = navController,
-            startDestination = "stats",
-            modifier = Modifier.padding(innerPadding)
-        ) {
-            composable("history") {
-                HistoryScreen(onSetTopBar = { topBarContent = it })
-            }
+        val layoutDirection = LocalLayoutDirection.current
+        val basePadding = PaddingValues(
+            start = innerPadding.calculateStartPadding(layoutDirection),
+            top = innerPadding.calculateTopPadding(),
+            end = innerPadding.calculateEndPadding(layoutDirection),
+            bottom = 0.dp
+        )
 
-            composable("stats") {
-                StatsScreen(onSetTopBar = { topBarContent = it })
-            }
-
-            composable("settings") {
-                SettingsScreen(onSetTopBar = { topBarContent = it })
-            }
-
-            composable("add_transaction") {
-                AddTransactionScreen(
-                    onSetTopBar = { topBarContent = it },
-                    onBack = { navController.popBackStack() },
-                )
-            }
+        Box(modifier = Modifier.padding(basePadding)) {
+            BudgetMateNavHost(
+                navController = navController,
+                onSetTopBar = { topBarContent = it },
+                modifier = Modifier.padding(bottom = if (currentRoute != "add_transaction") 80.dp else 0.dp)
+            )
         }
     }
 }

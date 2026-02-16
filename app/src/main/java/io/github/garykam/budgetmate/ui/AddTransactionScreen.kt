@@ -11,14 +11,15 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun AddTransactionScreen(
     onSetTopBar: (@Composable () -> Unit) -> Unit,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     LaunchedEffect(Unit) {
         onSetTopBar { Text("New Transaction") }
     }
 
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
