@@ -1,4 +1,4 @@
-package io.github.garykam.budgetmate.ui
+package io.github.garykam.budgetmate.ui.util
 
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.OffsetMapping

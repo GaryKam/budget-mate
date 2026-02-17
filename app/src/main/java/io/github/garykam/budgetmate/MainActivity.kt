@@ -41,7 +41,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
-import io.github.garykam.budgetmate.ui.AppNavHost
+import io.github.garykam.budgetmate.ui.navigation.AppNavHost
 import io.github.garykam.budgetmate.ui.theme.BudgetMateTheme
 
 @AndroidEntryPoint

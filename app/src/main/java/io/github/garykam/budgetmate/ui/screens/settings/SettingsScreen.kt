@@ -1,4 +1,4 @@
-package io.github.garykam.budgetmate.ui
+package io.github.garykam.budgetmate.ui.screens.settings
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*

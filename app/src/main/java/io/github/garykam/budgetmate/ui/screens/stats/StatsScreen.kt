@@ -1,4 +1,4 @@
-package io.github.garykam.budgetmate.ui
+package io.github.garykam.budgetmate.ui.screens.stats
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -7,7 +7,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavController
 
 @Composable
 fun StatsScreen(onSetTopBar: (@Composable () -> Unit) -> Unit) {

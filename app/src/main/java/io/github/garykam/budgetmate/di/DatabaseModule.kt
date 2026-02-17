@@ -6,8 +6,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import io.github.garykam.budgetmate.data.AppDatabase
-import io.github.garykam.budgetmate.data.TransactionRepository
+import io.github.garykam.budgetmate.data.local.AppDatabase
+import io.github.garykam.budgetmate.data.repository.TransactionRepository
 import javax.inject.Singleton
 
 @Module

@@ -1,4 +1,4 @@
-package io.github.garykam.budgetmate.ui
+package io.github.garykam.budgetmate.ui.screens.history
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,7 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import io.github.garykam.budgetmate.data.Transaction
+import io.github.garykam.budgetmate.data.local.entity.Transaction
 import java.text.DateFormat
 import java.text.NumberFormat
 import java.util.Date

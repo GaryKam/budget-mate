@@ -1,10 +1,10 @@
-package io.github.garykam.budgetmate.ui
+package io.github.garykam.budgetmate.ui.screens.add
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.github.garykam.budgetmate.data.Transaction
-import io.github.garykam.budgetmate.data.TransactionRepository
+import io.github.garykam.budgetmate.data.local.entity.Transaction
+import io.github.garykam.budgetmate.data.repository.TransactionRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

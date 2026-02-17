@@ -1,10 +1,14 @@
-package io.github.garykam.budgetmate.ui
+package io.github.garykam.budgetmate.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import io.github.garykam.budgetmate.ui.screens.add.AddTransactionScreen
+import io.github.garykam.budgetmate.ui.screens.history.HistoryScreen
+import io.github.garykam.budgetmate.ui.screens.settings.SettingsScreen
+import io.github.garykam.budgetmate.ui.screens.stats.StatsScreen
 
 @Composable
 fun AppNavHost(

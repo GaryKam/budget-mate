@@ -1,11 +1,14 @@
-package io.github.garykam.budgetmate.ui
+package io.github.garykam.budgetmate.ui.screens.add
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -14,6 +17,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -33,8 +37,10 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import io.github.garykam.budgetmate.ui.util.CurrencyVisualTransformation
 
 @Composable
 fun AddTransactionScreen(
@@ -94,13 +100,23 @@ fun AddTransactionScreen(
 
         AnimatedVisibility(visible = !isTextFieldFocused) {
             Button(
-                onClick = { 
+                onClick = {
                     viewModel.addTransaction(onComplete = onBack)
                 },
                 modifier = Modifier.padding(top = 16.dp)
             ) {
                 Text(
-                    text = "Add $ ${viewModel.formatAmount(amount)}",
+                    text = "+",
+                    modifier = Modifier
+                        .padding(horizontal = 8.dp)
+                        .defaultMinSize(20.dp)
+                        .background(MaterialTheme.colorScheme.onPrimary, CircleShape),
+                    color = MaterialTheme.colorScheme.primary,
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center
+                )
+                Text(
+                    text = "$ ${viewModel.formatAmount(amount)}",
                     fontWeight = FontWeight.Bold
                 )
             }
