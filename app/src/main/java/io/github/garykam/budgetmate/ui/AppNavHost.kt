@@ -7,7 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 
 @Composable
-fun BudgetMateNavHost(
+fun AppNavHost(
     navController: NavHostController,
     onSetTopBar: (@Composable () -> Unit) -> Unit,
     modifier: Modifier = Modifier
