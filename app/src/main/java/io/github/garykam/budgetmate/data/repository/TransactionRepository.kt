@@ -5,7 +5,7 @@ import io.github.garykam.budgetmate.data.local.entity.Transaction
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class TransactionRepository @Inject constructor(private val database: AppDatabase) {
+class TransactionRepository @Inject constructor(database: AppDatabase) {
     private val transactionDao = database.transactionDao()
 
     val allTransactions: Flow<List<Transaction>> = transactionDao.getAll()

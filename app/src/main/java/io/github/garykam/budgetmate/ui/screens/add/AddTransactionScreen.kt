@@ -4,9 +4,12 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -14,6 +17,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -49,10 +53,13 @@ fun AddTransactionScreen(
     modifier: Modifier = Modifier,
     viewModel: AddTransactionViewModel = hiltViewModel()
 ) {
+    val name by viewModel.name.collectAsState()
     val amount by viewModel.amount.collectAsState()
+    val isSaving by viewModel.isSaving.collectAsState()
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
     var isTextFieldFocused by remember { mutableStateOf(false) }
+    var showErrors by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         onSetTopBar {
@@ -73,17 +80,64 @@ fun AddTransactionScreen(
         modifier = modifier
             .fillMaxSize()
             .padding(16.dp),
-        verticalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Spacer(modifier = Modifier.height(48.dp))
+
+        Text(
+            text = "New Transaction",
+            style = MaterialTheme.typography.headlineLarge,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onSurface,
+            modifier = Modifier.padding(bottom = 32.dp)
+        )
+
         OutlinedTextField(
-            value = amount,
-            onValueChange = { viewModel.onAmountChange(it) },
+            value = name,
+            onValueChange = {
+                viewModel.onNameChange(it)
+                if (showErrors && it.isNotBlank()) {
+                    showErrors = false
+                }
+            },
             modifier = Modifier
-                .width(200.dp)
+                .width(280.dp)
                 .focusRequester(focusRequester)
                 .onFocusChanged { isTextFieldFocused = it.isFocused },
+            label = { Text("Name") },
+            isError = showErrors && name.isBlank(),
+            supportingText = {
+                if (showErrors && name.isBlank()) {
+                    Text("Cannot be empty")
+                }
+            },
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Next
+            ),
+            singleLine = true
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        OutlinedTextField(
+            value = amount,
+            onValueChange = {
+                viewModel.onAmountChange(it)
+                if (showErrors && it.isNotEmpty()) {
+                    showErrors = false
+                }
+            },
+            modifier = Modifier
+                .width(280.dp)
+                .onFocusChanged { isTextFieldFocused = it.isFocused },
             label = { Text("Amount") },
+            isError = showErrors && amount.isEmpty(),
+            supportingText = {
+                if (showErrors && amount.isEmpty()) {
+                    Text("Cannot be empty")
+                }
+            },
             prefix = { Text("$ ") },
             visualTransformation = CurrencyVisualTransformation(),
             keyboardOptions = KeyboardOptions(
@@ -92,33 +146,49 @@ fun AddTransactionScreen(
             ),
             keyboardActions = KeyboardActions(
                 onDone = {
+                    showErrors = true
                     focusManager.clearFocus()
                 }
             ),
             singleLine = true
         )
 
-        AnimatedVisibility(visible = !isTextFieldFocused) {
+        AnimatedVisibility(visible = !isTextFieldFocused && name.isNotBlank() && amount.isNotEmpty()) {
             Button(
                 onClick = {
-                    viewModel.addTransaction(onComplete = onBack)
+                    if (name.isNotBlank() && amount.isNotEmpty()) {
+                        viewModel.addTransaction(onComplete = onBack)
+                    } else {
+                        showErrors = true
+                    }
                 },
-                modifier = Modifier.padding(top = 16.dp)
+                enabled = !isSaving && name.isNotBlank() && amount.isNotBlank(),
+                modifier = Modifier.padding(top = 24.dp)
+                    .defaultMinSize(minWidth = 150.dp)
             ) {
-                Text(
-                    text = "+",
-                    modifier = Modifier
-                        .padding(horizontal = 8.dp)
-                        .defaultMinSize(20.dp)
-                        .background(MaterialTheme.colorScheme.onPrimary, CircleShape),
-                    color = MaterialTheme.colorScheme.primary,
-                    fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Center
-                )
-                Text(
-                    text = "$ ${viewModel.formatAmount(amount)}",
-                    fontWeight = FontWeight.Bold
-                )
+                if (isSaving) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(24.dp),
+                        color = MaterialTheme.colorScheme.onErrorContainer,
+                        strokeWidth = 2.dp
+                    )
+                } else {
+                    Text(
+                        text = "+",
+                        modifier = Modifier
+                            .padding(horizontal = 4.dp)
+                            .size(20.dp)
+                            .background(MaterialTheme.colorScheme.onPrimary, CircleShape),
+                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center
+                    )
+                    Text(
+                        text = "Add $ ${viewModel.formatAmount(amount)}",
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(start = 8.dp)
+                    )
+                }
             }
         }
     }
