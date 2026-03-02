@@ -8,14 +8,18 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -25,6 +29,7 @@ import java.text.NumberFormat
 import java.util.Date
 import java.util.Locale
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HistoryScreen(
     onSetTopBar: (@Composable () -> Unit) -> Unit,
@@ -32,24 +37,26 @@ fun HistoryScreen(
     viewModel: HistoryViewModel = hiltViewModel()
 ) {
     val transactions by viewModel.uiState.collectAsState()
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
     LaunchedEffect(Unit) {
-        onSetTopBar {}
+        onSetTopBar {
+            MediumTopAppBar(
+                title = { Text("Transaction History") },
+                //style = MaterialTheme.typography.headlineMedium,
+                //modifier = Modifier.padding(bottom = 16.dp)
+                scrollBehavior = scrollBehavior
+            )
+        }
     }
 
     LazyColumn(
         modifier = modifier
             .fillMaxSize()
+            .nestedScroll(scrollBehavior.nestedScrollConnection)
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        item {
-            Text(
-                text = "Transaction History",
-                style = MaterialTheme.typography.headlineMedium,
-                modifier = Modifier.padding(bottom = 16.dp)
-            )
-        }
         items(transactions) { transaction ->
             TransactionItem(transaction = transaction)
             HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))

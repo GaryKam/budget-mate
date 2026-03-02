@@ -1,4 +1,4 @@
-package io.github.garykam.budgetmate.ui.screens.add
+package io.github.garykam.budgetmate.ui.screens.addtransaction
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -18,7 +18,6 @@ import javax.inject.Inject
 class AddTransactionViewModel @Inject constructor(
     private val repository: TransactionRepository
 ) : ViewModel() {
-
     private val _name = MutableStateFlow("")
     val name: StateFlow<String> = _name.asStateFlow()
 
