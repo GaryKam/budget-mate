@@ -27,20 +27,18 @@ class AddTransactionViewModel @Inject constructor(
     private val _isSaving = MutableStateFlow(false)
     val isSaving: StateFlow<Boolean> = _isSaving.asStateFlow()
 
-    fun onNameChange(newValue: String) {
-        if (_isSaving.value) {
-            return
+    fun onNameChange(name: String) {
+        if (!_isSaving.value) {
+            _name.value = name
         }
-        _name.value = newValue
     }
 
-    fun onAmountChange(newValue: String) {
-        if (_isSaving.value) {
-            return
-        }
-        val digits = newValue.filter { it.isDigit() }
-        if (digits.length <= 9) {
-            _amount.value = digits
+    fun onAmountChange(amount: String) {
+        if (!_isSaving.value) {
+            val digits = amount.filter { it.isDigit() }
+            if (digits.length <= 9) {
+                _amount.value = digits
+            }
         }
     }
 
@@ -76,6 +74,5 @@ class AddTransactionViewModel @Inject constructor(
             )
             onComplete()
         }
-
     }
 }
