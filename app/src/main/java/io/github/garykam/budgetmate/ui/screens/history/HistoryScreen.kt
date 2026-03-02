@@ -46,7 +46,7 @@ fun HistoryScreen(
     modifier: Modifier = Modifier,
     viewModel: HistoryViewModel = hiltViewModel()
 ) {
-    val transactions by viewModel.uiState.collectAsState()
+    val transactions by viewModel.transactions.collectAsState()
     
     // Define the heights for expanded and collapsed states
     val expandedHeight = 112.dp

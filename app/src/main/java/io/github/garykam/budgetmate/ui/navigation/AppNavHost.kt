@@ -6,10 +6,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.calculateEndPadding
-import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -32,8 +28,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -123,36 +117,22 @@ private fun MainScaffold(rootNavController: NavHostController) {
             },
             floatingActionButtonPosition = FabPosition.EndOverlay,
         ) { innerPadding ->
-            val layoutDirection = LocalLayoutDirection.current
-            val padding = PaddingValues(
-                start = innerPadding.calculateStartPadding(layoutDirection),
-                top = innerPadding.calculateTopPadding(),
-                end = innerPadding.calculateEndPadding(layoutDirection),
-                bottom = 0.dp
-            )
-
-            Box(
-                modifier = Modifier
-                    .padding(padding)
-                    .fillMaxSize()
+            NavHost(
+                navController = navController,
+                startDestination = "stats",
+                modifier = Modifier.padding(innerPadding) // Space for bottom bar
             ) {
-                NavHost(
-                    navController = navController,
-                    startDestination = "stats",
-                    modifier = Modifier.padding(bottom = 80.dp) // Space for bottom bar
-                ) {
-                    composable("history") {
-                        HistoryScreen(onSetTopBar = { topBarContent = it })
-                    }
-                    composable("stats") {
-                        StatsScreen(onSetTopBar = { topBarContent = it })
-                    }
-                    composable("settings") {
-                        SettingsScreen(
-                            onSetTopBar = { topBarContent = it },
-                            onNavigateToAddCard = { rootNavController.navigate("add_card") }
-                        )
-                    }
+                composable("history") {
+                    HistoryScreen(onSetTopBar = { topBarContent = it })
+                }
+                composable("stats") {
+                    StatsScreen(onSetTopBar = { topBarContent = it })
+                }
+                composable("settings") {
+                    SettingsScreen(
+                        onSetTopBar = { topBarContent = it },
+                        onNavigateToAddCard = { rootNavController.navigate("add_card") }
+                    )
                 }
             }
         }
