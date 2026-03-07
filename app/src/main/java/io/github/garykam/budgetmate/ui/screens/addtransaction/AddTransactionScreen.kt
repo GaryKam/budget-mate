@@ -117,7 +117,7 @@ fun AddTransactionScreen(
                 isError = showErrors && name.isBlank(),
                 supportingText = {
                     if (showErrors && name.isBlank()) {
-                        Text("Cannot be empty")
+                        Text("A name is required")
                     }
                 },
                 keyboardOptions = KeyboardOptions(
@@ -143,7 +143,7 @@ fun AddTransactionScreen(
                 isError = showErrors && amount.isEmpty(),
                 supportingText = {
                     if (showErrors && amount.isEmpty()) {
-                        Text("Cannot be empty")
+                        Text("An amount is required")
                     }
                 },
                 prefix = { Text("$ ") },

@@ -18,24 +18,19 @@ class AddCardViewModel @Inject constructor(
     private val _name = MutableStateFlow("")
     val name: StateFlow<String> = _name.asStateFlow()
 
-    private val _digits = MutableStateFlow("")
-    val digits: StateFlow<String> = _digits.asStateFlow()
-
-    private val _selectedOption = MutableStateFlow("Chase")
+    private val _selectedOption = MutableStateFlow("")
     val selectedOption: StateFlow<String> = _selectedOption.asStateFlow()
 
     private val _isSaving = MutableStateFlow(false)
     val isSaving: StateFlow<Boolean> = _isSaving.asStateFlow()
 
+    private val _isDirty = MutableStateFlow(false)
+    val isDirty: StateFlow<Boolean> = _isDirty.asStateFlow()
+
     fun onNameChange(name: String) {
         if (!isSaving.value) {
             _name.value = name
-        }
-    }
-
-    fun onDigitChange(digits: String) {
-        if (!isSaving.value) {
-            _digits.value = digits
+            _isDirty.value = name.isNotBlank()
         }
     }
 
