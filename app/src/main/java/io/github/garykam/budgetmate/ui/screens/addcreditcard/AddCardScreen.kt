@@ -39,7 +39,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import io.github.garykam.budgetmate.data.local.model.CardBrand
+import io.github.garykam.budgetmate.data.local.model.CreditCardBrand
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -167,7 +167,7 @@ fun AddCardScreen(
                             readOnly = true,
                             leadingIcon = {
                                 selectedBrand?.iconRes?.let {
-                                    Icon(painter = painterResource(it), contentDescription = "null")
+                                    Icon(painter = painterResource(it), contentDescription = null)
                                 }
                             },
                             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = isDropdownOpen) },
@@ -179,11 +179,11 @@ fun AddCardScreen(
                             expanded = isDropdownOpen,
                             onDismissRequest = { isDropdownOpen = false }
                         ) {
-                            CardBrand.entries.forEach { brand ->
+                            CreditCardBrand.entries.forEach { brand ->
                                 DropdownMenuItem(
                                     text = { Text(brand.displayName) },
                                     onClick = {
-                                        viewModel.onBrandChange(CardBrand.fromString(brand.displayName))
+                                        viewModel.onBrandChange(brand)
                                         isDropdownOpen = false
                                     },
                                     contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding

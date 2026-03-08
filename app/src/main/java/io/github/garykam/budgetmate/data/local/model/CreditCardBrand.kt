@@ -3,7 +3,7 @@ package io.github.garykam.budgetmate.data.local.model
 import androidx.annotation.DrawableRes
 import io.github.garykam.budgetmate.R
 
-enum class CardBrand(
+enum class CreditCardBrand(
     val displayName: String,
     @param:DrawableRes val iconRes: Int
 ) {
@@ -12,7 +12,7 @@ enum class CardBrand(
     DISCOVER("Discover", R.drawable.ic_discover);
 
     companion object {
-        fun fromString(name: String): CardBrand? {
+        fun fromString(name: String): CreditCardBrand? {
             return entries.find { it.displayName == name }
         }
     }
