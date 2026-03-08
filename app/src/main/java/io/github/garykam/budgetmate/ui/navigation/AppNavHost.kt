@@ -34,7 +34,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import io.github.garykam.budgetmate.ui.screens.addcard.AddCardScreen
+import io.github.garykam.budgetmate.ui.screens.addcreditcard.AddCardScreen
 import io.github.garykam.budgetmate.ui.screens.addtransaction.AddTransactionScreen
 import io.github.garykam.budgetmate.ui.screens.history.HistoryScreen
 import io.github.garykam.budgetmate.ui.screens.settings.SettingsScreen

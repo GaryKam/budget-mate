@@ -1,9 +1,10 @@
-package io.github.garykam.budgetmate.ui.screens.addcard
+package io.github.garykam.budgetmate.ui.screens.addcreditcard
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.github.garykam.budgetmate.data.repository.TransactionRepository
+import io.github.garykam.budgetmate.data.local.model.CardBrand
+import io.github.garykam.budgetmate.data.repository.CreditCardRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -12,14 +13,14 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class AddCardViewModel @Inject constructor(
-    private val repository: TransactionRepository
+class AddCreditCardViewModel @Inject constructor(
+    private val repository: CreditCardRepository
 ) : ViewModel() {
     private val _name = MutableStateFlow("")
     val name: StateFlow<String> = _name.asStateFlow()
 
-    private val _selectedOption = MutableStateFlow("")
-    val selectedOption: StateFlow<String> = _selectedOption.asStateFlow()
+    private val _selectedBrand: MutableStateFlow<CardBrand?> = MutableStateFlow(null)
+    val selectedBrand: StateFlow<CardBrand?> = _selectedBrand.asStateFlow()
 
     private val _isSaving = MutableStateFlow(false)
     val isSaving: StateFlow<Boolean> = _isSaving.asStateFlow()
@@ -34,9 +35,9 @@ class AddCardViewModel @Inject constructor(
         }
     }
 
-    fun onOptionSelected(option: String) {
+    fun onBrandChange(brand: CardBrand?) {
         if (!isSaving.value) {
-            _selectedOption.value = option
+            _selectedBrand.value = brand
         }
     }
 
@@ -49,8 +50,14 @@ class AddCardViewModel @Inject constructor(
             _isSaving.value = true
             delay(1000L)
 
-            onComplete()
-            _isSaving.value = false
+            try {
+                repository.addCreditCard(name = _name.value, brand = _selectedBrand.value?.name)
+                onComplete()
+            } catch (exception: Exception) {
+                // TODO
+            } finally {
+                _isSaving.value = false
+            }
         }
     }
 }

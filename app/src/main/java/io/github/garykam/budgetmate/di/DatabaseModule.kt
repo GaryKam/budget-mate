@@ -7,6 +7,9 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import io.github.garykam.budgetmate.data.local.AppDatabase
+import io.github.garykam.budgetmate.data.local.dao.CreditCardDao
+import io.github.garykam.budgetmate.data.local.dao.TransactionDao
+import io.github.garykam.budgetmate.data.repository.CreditCardRepository
 import io.github.garykam.budgetmate.data.repository.TransactionRepository
 import javax.inject.Singleton
 
@@ -20,8 +23,24 @@ object DatabaseModule {
     }
 
     @Provides
+    fun provideTransactionDao(database: AppDatabase): TransactionDao {
+        return database.transactionDao()
+    }
+
+    @Provides
+    fun provideCreditCardDao(database: AppDatabase): CreditCardDao {
+        return database.creditCardDao()
+    }
+
+    @Provides
     @Singleton
-    fun provideTransactionRepository(database: AppDatabase): TransactionRepository {
-        return TransactionRepository(database)
+    fun provideTransactionRepository(dao: TransactionDao): TransactionRepository {
+        return TransactionRepository(dao)
+    }
+
+    @Provides
+    @Singleton
+    fun provideCreditCardRepository(dao: CreditCardDao): CreditCardRepository {
+        return CreditCardRepository(dao)
     }
 }
