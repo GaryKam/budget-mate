@@ -8,6 +8,7 @@ import io.github.garykam.budgetmate.data.repository.CreditCardRepository
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,7 +22,9 @@ class SettingsViewModel @Inject constructor(
             initialValue = emptyList()
         )
 
-    fun removeCreditCard() {
-        // repository.deleteCreditCard()
+    fun removeCreditCard(id: Int) {
+        viewModelScope.launch {
+            repository.deleteCreditCard(id)
+        }
     }
 }
